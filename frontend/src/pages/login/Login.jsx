@@ -31,7 +31,7 @@ const Login = () => {
   const registerUser = async (currentUser) => {
     try {
       const response = await axios.post(
-        `https://food-delivery-app-five-gamma.vercel.app/api/user/register`,
+        'http://localhost:3100/signUp', //..
         currentUser
       );
       const { user, token } = response.data;
@@ -49,7 +49,7 @@ const Login = () => {
   const loginUser = async (currentUser) => {
     try {
       const response = await axios.post(
-        `https://food-delivery-app-five-gamma.vercel.app/api/user/login`,
+        'http://localhost:3100/login', //..
         currentUser
       );
       const { user, token } = response.data;
