@@ -14,7 +14,7 @@ app.use(express.json());
 
 mongoose
   .connect(
-    "mongodb+srv://anantpatni1:r6ptkxcYj907vYFt@cluster0.dze4qzt.mongodb.net/?retryWrites=true&w=majority"
+    "mongodb+srv://darkking:<db_password>@cluster0.bpjlo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
   )
   .then(() => {
     console.log("Connected");

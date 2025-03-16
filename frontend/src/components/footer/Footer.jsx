@@ -8,7 +8,7 @@ const Footer = () => {
   return (
     <footer>
       <div className="footer-nav">
-        <h2>Importants links</h2>
+        <h2>Importans links</h2>
         <NavLink to="/" className="footer-navlink">
           Home
         </NavLink>
@@ -34,7 +34,7 @@ const Footer = () => {
         <div className="footer-social-icons">
           <p className="facebook-icon">
             {" "}
-            <FacebookIcon />{" "}
+            <FacebookIcon />
           </p>
           <p className="insta-icon">
             {" "}

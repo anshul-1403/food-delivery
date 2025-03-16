@@ -15,7 +15,7 @@ const Shop = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get('http://localhost:3100/dishes');
+        const response = await axios.get(`https://food-delivery-app-five-gamma.vercel.app/api/dishes`);
         console.log(response.data);
         setProduct(response.data);
         setFoodOnly(response.data.filter((item) => item.category === "food"));
