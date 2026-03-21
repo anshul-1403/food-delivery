@@ -1,7 +1,8 @@
-import { Button, TextField } from "@mui/material";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import axios from "axios";
+import { Button, TextField } from "@mui/material";
+import { login, register } from "../../services/api";
+
 
 import "./Login.css";
 
@@ -13,7 +14,8 @@ const initialState = {
 };
 
 const Login = () => {
-  const [isMember, setIsMember] = useState(false);
+
+  const [isMember, setIsMember] = useState(true); // Default to login
   const [values, setValues] = useState(initialState);
   const [error, setError] = useState("");
 
@@ -28,53 +30,47 @@ const Login = () => {
     localStorage.setItem("token", token);
   };
 
-  const registerUser = async (currentUser) => {
+  const handleRegister = async (currentUser) => {
     try {
-      const response = await axios.post(
-        `https://food-delivery-143.vercel.app/api/user/register`,
-        currentUser
-      );
+      const response = await register(currentUser);
       const { user, token } = response.data;
       addUserToLocalStorage({ user, token });
       if (user) {
         navigate("/foods");
-        location.reload();
+        window.location.reload();
       }
     } catch (e) {
       console.log(e);
-      setError(e.response.data);
+      setError(e.response?.data?.message || "Registration failed");
     }
   };
 
-  const loginUser = async (currentUser) => {
+  const handleLogin = async (currentUser) => {
     try {
-      const response = await axios.post(
-        `https://food-delivery-143.vercel.app/api/user/login`,
-        currentUser
-      );
+      const response = await login(currentUser.email, currentUser.password);
       const { user, token } = response.data;
       addUserToLocalStorage({ user, token });
       if (user) {
         navigate("/foods");
-        location.reload();
+        window.location.reload();
       }
     } catch (e) {
       console.log(e);
-      setError(e.response.data);
+      setError(e.response?.data?.message || "Login failed");
     }
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
     const { name, email, password, cnf_password } = values;
-    console.log(name);
-    const currentUser = { name, email, password, cnf_password };
+    
     if (isMember) {
-      loginUser(currentUser);
+      handleLogin({ email, password });
     } else {
-      registerUser(currentUser);
+      handleRegister({ name, email, password, cnf_password });
     }
   };
+
   return (
     <div className="contact-form">
       <h2>Login/Signup</h2>

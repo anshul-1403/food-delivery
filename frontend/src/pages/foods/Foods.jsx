@@ -1,35 +1,35 @@
+import { toast } from "react-toastify";
 import "./Food.css";
 
-const Foods = ({data}) => {
-
+const Foods = ({ data }) => {
   const addItem = (item) => {
-    //create a copy of our cart state, avoid overwritting existing state
     let existingCart = [];
-    if (localStorage.getItem("cart") && JSON.parse(localStorage.getItem("cart"))) {
-      existingCart = JSON.parse(localStorage.getItem("cart"));
+    const localCart = localStorage.getItem("cart");
+    if (localCart) {
+      existingCart = JSON.parse(localCart);
     }
+    
     let cartCopy = [...existingCart];
-    let itemCopy = { ...item };
+    // Use _id (from MongoDB) or id (from seed/JSON)
+    const itemId = item._id || item.id;
+    
+    let existingItem = cartCopy.find((cartItem) => (cartItem._id || cartItem.id) === itemId);
 
-    //assuming we have an ID field in our item
-    let { id } = itemCopy;
-    console.log(itemCopy);
-    //look for item in cart array
-    let existingItem = cartCopy.find((cartItem) => cartItem.id == id);
-    console.log(existingItem);
-    //if item already exists
     if (existingItem) {
-      existingItem.quantity += 1; //update item
-      console.log(existingItem);
+      existingItem.quantity += 1;
     } else {
-      //if item doesn't exist, simply add it
-      itemCopy.quantity = 1;
-      cartCopy.push(itemCopy);
+      cartCopy.push({ ...item, quantity: 1 });
     }
-    //update app state
-    //make cart a string and store in local space
-    let stringCart = JSON.stringify(cartCopy);
-    localStorage.setItem("cart", stringCart);
+
+    localStorage.setItem("cart", JSON.stringify(cartCopy));
+    
+    // Dispatch custom event for Navbar to update count
+    window.dispatchEvent(new Event("cartUpdated"));
+    
+    toast.success(`${item.name} added to cart!`, {
+      position: "bottom-right",
+      autoClose: 2000,
+    });
   };
 
   const handleAddFood = (item) => {
@@ -38,24 +38,23 @@ const Foods = ({data}) => {
 
   return (
     <div className="food-list">
-      {data.map((item) => {
-        return (
-          <div key={item.id} className="food">
-            <img src={item.img} width="15%" alt="" />
-            <p className="food-name">{item.name}</p>
-            <div className="food-footer">
-              <span className="food-price">Rs. {item.price}</span>
-              <span>Delivery free</span>
-            </div>
-
-            <button className="add-food" onClick={() => handleAddFood(item)}>
-              Add
-            </button>
+      {data.map((item) => (
+        <div key={item._id || item.id} className="food">
+          <img src={item.img} width="15%" alt={item.name} />
+          <p className="food-name">{item.name}</p>
+          <div className="food-footer">
+            <span className="food-price">Rs. {item.price}</span>
+            <span>Delivery free</span>
           </div>
-        );
-      })}
+
+          <button className="add-food" onClick={() => handleAddFood(item)}>
+            Add
+          </button>
+        </div>
+      ))}
     </div>
   );
 };
 
 export default Foods;
+

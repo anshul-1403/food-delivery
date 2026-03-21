@@ -2,19 +2,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: white;
-  padding: px;
+  background-color: var(--nav-bg);
+  color: var(--text-color);
+  padding: 0 40px;
   height: 80px;
-  padding-right: 80px;
   position: sticky;
-  top: 0%;
+  top: 0;
   z-index: 100;
-  transition: 0.5s;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 nav .nav-1 {
   display: flex;
-  padding-left: 40px;
   align-items: center;
   gap: 30px;
 }
@@ -22,73 +22,80 @@ nav .nav-1 {
 nav .nav-2 {
   display: flex;
   align-items: center;
-  margin-right: 40px;
-  gap: 10px;
+  gap: 20px;
 }
 
 .cart-icon img {
-  height: 30px;
-  width: 30px;
+  height: 28px;
+  width: 28px;
+  filter: var(--cart-filter); /* if we want to change color */
 }
 
 nav .nav-link {
   text-decoration: none;
   font-weight: 600;
+  color: inherit;
+  transition: color 0.3s;
 }
 
-.cart-icon {
-  height: 35px;
-  padding-top: 10px;
-  position: relative;
-  width: 37px;
+nav .nav-link:hover, .nav-link.active {
+  color: var(--accent-color);
 }
 
-.cart-icon span {
-  position: absolute;
-  top: 0%;
-  right: 0%;
-  color: orangered;
+.logout-btn {
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 6px 15px;
+  border-radius: 6px;
+  cursor: pointer;
   font-weight: 600;
-  height: 20px;
-  width: fit-content;
-  padding: 3px;
-  border-radius: 50%;
-  background-color: whitesmoke;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  transition: all 0.2s;
+}
+
+.logout-btn:hover {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: white;
+}
+
+.user-name-nav {
+  color: var(--text-color);
+  opacity: 0.8;
 }
 
 .menu {
   display: none;
   background: none;
   border: none;
-  outline: none;
+  color: var(--text-color);
+  cursor: pointer;
 }
 
-.expand {
-  height: 300px;
-}
+@media (max-width: 900px) {
+  .nav-bar {
+    padding: 0 20px;
+  }
+  
+  nav .nav-1 {
+    display: none;
+  }
 
-@media (max-width: 600px) {
+  .nav-1.visible {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    background-color: var(--nav-bg);
+    padding: 20px;
+    box-shadow: 0 10px 10px rgba(0,0,0,0.1);
+    gap: 20px;
+  }
+
   .menu {
     display: block;
   }
-
-  .nav-1 {
-    visibility: hidden;
-  }
-
-  .visible {
-    flex-direction: column;
-    visibility: visible;
-    line-height: 10px;
-    padding-bottom: 10px;
-  }
-
-  .nav-2 {
-    position: absolute;
-    right: 0;
-    top: 15px;
-  }
 }
+

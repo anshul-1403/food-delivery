@@ -1,0 +1,178 @@
+.delivery-dashboard {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 20px;
+  font-family: 'Inter', sans-serif;
+}
+
+.delivery-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.delivery-header h1 {
+  font-size: 2.5rem;
+  color: #ffffff !important;
+  margin-bottom: 25px;
+  font-weight: 800;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.delivery-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+
+.delivery-tabs button {
+  padding: 12px 24px;
+  border: none;
+  background: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #7f8c8d;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px 8px 0 0;
+}
+
+.delivery-tabs button.active {
+  color: #e74c3c;
+  background: rgba(231, 76, 60, 0.05);
+  border-bottom: 3px solid #e74c3c;
+}
+
+.delivery-content {
+  margin-top: 30px;
+}
+
+.jobs-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.delivery-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  border: 1px solid var(--border-color);
+  transition: transform 0.3s ease;
+}
+
+.delivery-card:hover {
+  transform: translateY(-5px);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.order-tag {
+  background: #f8f9fa;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-family: monospace;
+}
+
+.price-tag {
+  color: #27ae60;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.card-body p {
+  margin: 8px 0;
+  color: var(--text-color);
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.btn-pickup, .btn-complete {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-pickup {
+  background: #e74c3c;
+  color: white;
+}
+
+.btn-pickup:hover {
+  background: #c0392b;
+}
+
+.btn-complete, .btn-chat {
+  flex: 1 !important;
+  width: 100% !important;
+  height: 44px !important;
+  padding: 0 !important; /* Force zero padding to keep widths equal */
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px !important;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none !important;
+}
+
+.btn-chat {
+  background: var(--accent-color) !important;
+  color: white !important;
+}
+
+.btn-complete {
+  background: #2ecc71 !important;
+  color: white !important;
+}
+
+.delivery-card-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  width: 100%;
+}
+
+
+
+.active-card {
+  border-left: 5px solid #27ae60;
+}
+
+.status-tag {
+  color: #27ae60;
+  font-weight: bold;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+.no-data {
+  text-align: center;
+  color: #7f8c8d;
+  font-size: 1.2rem;
+  margin-top: 50px;
+  grid-column: 1 / -1;
+}
+
+.delivery-loader {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #e74c3c;
+  margin-top: 50px;
+}

@@ -1,0 +1,124 @@
+.delivery-reg-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-color); /* Light gray background */
+  padding: 40px 20px;
+}
+
+.delivery-reg-card {
+  width: 100%;
+  max-width: 650px;
+  background: var(--card-bg);
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  border: 1px solid var(--border-color);
+}
+
+.delivery-reg-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.delivery-reg-header h1 {
+  font-size: 2rem;
+  color: var(--text-color);
+  margin-bottom: 10px;
+}
+
+.delivery-reg-header p {
+  color: var(--text-color);
+  opacity: 0.6;
+}
+
+.delivery-reg-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+  padding: 12px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--secondary-bg);
+  color: var(--text-color);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus, 
+.form-group select:focus, 
+.form-group textarea:focus {
+  border-color: var(--accent-color);
+}
+
+.form-group textarea {
+  height: 80px;
+  resize: none;
+}
+
+.btn-delivery-reg {
+  width: 100%;
+  padding: 14px;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-delivery-reg:hover {
+  background-color: #c0392b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.delivery-reg-footer {
+  text-align: center;
+  margin-top: 25px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 20px;
+}
+
+.delivery-reg-footer p {
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+.delivery-reg-footer a {
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

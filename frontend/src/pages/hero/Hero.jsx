@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 const Hero = () => {
   const navigate = useNavigate();
   const user = localStorage.getItem("user");
+  const parsedUser = user ? JSON.parse(user) : null;
+
 
   const logoutUser = () => {
     localStorage.removeItem("user");
@@ -14,27 +16,35 @@ const Hero = () => {
     <div className="hero-section">
       <div className="hero-title">
         <h1>
-          Haldiram's Delicious Food, <br /> delivered right at your doorstep!
+          BiteDash's Delicious Food, <br /> delivered right at your doorstep!
         </h1>
         <p>
-          Experience the rich and delectable world of Haldiram's cuisine at your
-          fingertips with the Haldiram Food Delivery App! Indulge in the
+          Experience the rich and delectable world of BiteDash's cuisine at your
+          fingertips with the BiteDash Food Delivery App! Indulge in the
           authentic flavors of India's favorite snacks, sweets, and savories,
           all conveniently delivered to your doorstep.
         </p>
+
         <div>
-          <button
-            className="order-now-btn"
-            onClick={() => navigate(user ? "/foods" : "/login")}
-          >
-            {user ? "Start Ordering" : "Login now"}
-          </button>
-          {user && (
-            <button style={{marginLeft: '10px'}} className="order-now-btn" onClick={() => logoutUser()}>
+          {(!parsedUser || parsedUser.role === "customer") && (
+            <button
+              className="order-now-btn"
+              onClick={() => navigate(parsedUser ? "/foods" : "/login")}
+            >
+              {parsedUser ? "Start Ordering" : "Login now"}
+            </button>
+          )}
+          {parsedUser && (
+            <button 
+              style={{marginLeft: (!parsedUser || parsedUser.role === "customer") ? '10px' : '0'}} 
+              className="order-now-btn" 
+              onClick={() => logoutUser()}
+            >
               {"Logout"}
             </button>
           )}
         </div>
+
       </div>
       <div className="hero-image">
         <img

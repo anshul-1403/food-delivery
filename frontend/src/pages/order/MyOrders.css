@@ -1,0 +1,94 @@
+.my-orders-container {
+  max-width: 900px;
+  margin: 70px auto;
+  padding: 20px;
+}
+
+.my-orders-container h1 {
+  text-align: center;
+  color: var(--text-color);
+  margin-bottom: 40px;
+  font-weight: 800;
+}
+
+.order-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  color: var(--text-color);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.order-id {
+  font-weight: bold;
+  opacity: 0.7;
+  font-size: 0.9rem;
+}
+
+.order-details p {
+  margin: 10px 0;
+  color: var(--text-color);
+  opacity: 0.8;
+}
+
+.order-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-track {
+  background: transparent;
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+  padding: 8px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.btn-track:hover {
+  background: var(--accent-color);
+  color: white;
+}
+
+.btn-reorder {
+  background-color: #2ecc71;
+  border: 1px solid #27ae60;
+  color: white;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-reorder:hover {
+  background-color: #27ae60;
+  transform: scale(1.05);
+}
+
+.status-delivered { background: #e8f5e9; color: #2e7d32; }
+/* ... (existing statuses simplified) */
+
+[data-theme='dark'] .order-card {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.btn-chat { background-color: #3498db; border: 1px solid #2980b9; color: white !important; padding: 8px 18px; border-radius: 8px; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.2s; } .btn-chat:hover { background-color: #2980b9; } .status-awaiting-delivery-confirmation { background: #fff3e0; color: #f57c00; }
