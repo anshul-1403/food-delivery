@@ -117,6 +117,56 @@
   font-weight: bold;
 }
 
+/* Vehicle Selector Styles */
+.vehicle-selector {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 5px;
+}
+
+.vehicle-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 15px 10px;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  cursor: pointer;
+  background: var(--secondary-bg);
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.vehicle-option:hover {
+  border-color: var(--accent-color);
+  transform: translateY(-2px);
+  background: rgba(231, 76, 60, 0.05);
+}
+
+.vehicle-option.selected {
+  border-color: var(--accent-color);
+  background: rgba(231, 76, 60, 0.1);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.15);
+}
+
+.vehicle-icon {
+  font-size: 1.5rem;
+}
+
+.vehicle-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+@media (max-width: 500px) {
+  .vehicle-selector {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 @media (max-width: 600px) {
   .form-row {
     grid-template-columns: 1fr;

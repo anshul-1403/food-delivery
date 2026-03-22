@@ -78,13 +78,13 @@ const Profile = () => {
       <Grid container spacing={4}>
         {/* Profile Card */}
         <Grid item xs={12} md={5}>
-          <Paper elevation={4} sx={{ p: 4, borderRadius: 3, textAlign: 'center' }}>
+          <Paper elevation={4} sx={{ p: 4, borderRadius: 3, textAlign: 'center', bgcolor: 'var(--card-bg)', color: 'var(--text-color)' }}>
             <Avatar 
               src={form.profilePic} 
               sx={{ width: 120, height: 120, mx: "auto", mb: 2, border: '4px solid #e74c3c' }} 
             />
             <Typography variant="h5" sx={{ fontWeight: "bold" }}>{form.name || "User Name"}</Typography>
-            <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>{email}</Typography>
+            <Typography variant="body2" sx={{ mb: 2, opacity: 0.7 }}>{email}</Typography>
             
             <TextField
               fullWidth
@@ -94,14 +94,15 @@ const Profile = () => {
               margin="normal"
               placeholder="https://example.com/photo.jpg"
               size="small"
+              sx={{ "& .MuiInputBase-input": { color: "var(--text-color)" }, "& .MuiInputLabel-root": { color: "var(--text-color)" }, "& .MuiOutlinedInput-notchedOutline": { borderColor: "var(--border-color)" } }}
             />
-            <Typography variant="caption" color="textSecondary">Paste an image URL to update your avatar</Typography>
+            <Typography variant="caption" sx={{ opacity: 0.7 }}>Paste an image URL to update your avatar</Typography>
           </Paper>
         </Grid>
 
         {/* Info and Address Book */}
         <Grid item xs={12} md={7}>
-          <Paper elevation={4} sx={{ p: 4, borderRadius: 3 }}>
+          <Paper elevation={4} sx={{ p: 4, borderRadius: 3, bgcolor: 'var(--card-bg)', color: 'var(--text-color)' }}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>Account Details</Typography>
             <form onSubmit={handleSave}>
               <TextField
@@ -111,6 +112,7 @@ const Profile = () => {
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 margin="normal"
                 required
+                sx={{ "& .MuiInputBase-input": { color: "var(--text-color)" }, "& .MuiInputLabel-root": { color: "var(--text-color)" }, "& .MuiOutlinedInput-notchedOutline": { borderColor: "var(--border-color)" } }}
               />
               <TextField
                 fullWidth
@@ -121,6 +123,7 @@ const Profile = () => {
                 multiline
                 rows={2}
                 placeholder="Required for checkout"
+                sx={{ "& .MuiInputBase-input": { color: "var(--text-color)" }, "& .MuiInputLabel-root": { color: "var(--text-color)" }, "& .MuiOutlinedInput-notchedOutline": { borderColor: "var(--border-color)" } }}
               />
               <TextField
                 fullWidth
@@ -129,9 +132,10 @@ const Profile = () => {
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 margin="normal"
                 placeholder="10-digit mobile"
+                sx={{ "& .MuiInputBase-input": { color: "var(--text-color)" }, "& .MuiInputLabel-root": { color: "var(--text-color)" }, "& .MuiOutlinedInput-notchedOutline": { borderColor: "var(--border-color)" } }}
               />
 
-              <Divider sx={{ my: 3 }} />
+              <Divider sx={{ my: 3, borderColor: 'var(--border-color)' }} />
               
               <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>Address Book</Typography>
               <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
@@ -141,13 +145,14 @@ const Profile = () => {
                   placeholder="Add another address (Office, Mom's, etc.)"
                   value={newAddress}
                   onChange={(e) => setNewAddress(e.target.value)}
+                  sx={{ "& .MuiInputBase-input": { color: "var(--text-color)" }, "& .MuiOutlinedInput-notchedOutline": { borderColor: "var(--border-color)" } }}
                 />
                 <Button variant="outlined" onClick={addAddress} startIcon={<AddIcon />}>Add</Button>
               </Box>
               
-              <List dense sx={{ bgcolor: 'rgba(0,0,0,0.02)', borderRadius: 2 }}>
+              <List dense sx={{ bgcolor: 'var(--secondary-bg)', borderRadius: 2 }}>
                 {form.addresses.length === 0 ? (
-                  <ListItem><ListItemText secondary="No extra addresses added" /></ListItem>
+                  <ListItem><ListItemText primary="No extra addresses added" sx={{ opacity: 0.6 }} /></ListItem>
                 ) : (
                   form.addresses.map((addr, i) => (
                     <ListItem key={i}>

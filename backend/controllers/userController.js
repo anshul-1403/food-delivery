@@ -91,9 +91,9 @@ const loginUser = async (req, res) => {
 
 const getProfile = async (req, res) => {
   try {
-    const user = await UserModel.findById(req.userId).select("-password");
-    if (!user) return res.status(404).json({ message: "User not found" });
-    return res.status(200).json(user);
+    const userDoc = await UserModel.findById(req.userId).select("-password");
+    if (!userDoc) return res.status(404).json({ message: "User not found" });
+    return res.status(200).json(userDoc.toObject());
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
   }
@@ -116,13 +116,12 @@ const updateProfile = async (req, res) => {
 
 const registerDeliveryPartner = async (req, res) => {
   try {
-    const { name, email, password, cnf_password, vehicleId, vehicleType, phone, address } = req.body;
+    const { name, email, password, cnf_password, vehicleId, phone, address } = req.body;
 
     if (password !== cnf_password) {
       return res.status(400).json({ message: "The two passwords don't match" });
     }
 
-    // Vehicle ID Regex (Indian Bike/Scooty: e.g. MH12AB1234)
     const vehicleRegex = /^[A-Z]{2}[0-9]{2}[A-Z]{1,2}[0-9]{4}$/;
     if (!vehicleRegex.test(vehicleId?.toUpperCase())) {
       return res.status(400).json({ message: "Invalid Indian Vehicle Number (e.g., MH12AB1234)" });
@@ -141,7 +140,6 @@ const registerDeliveryPartner = async (req, res) => {
       role: "delivery",
       status: "pending",
       vehicleId: vehicleId.toUpperCase(),
-      vehicleType,
       phone,
       address,
     });
@@ -181,13 +179,24 @@ const updatePartnerStatus = async (req, res) => {
 const requestVehicleUpdate = async (req, res) => {
   try {
     const { newId } = req.body;
+    
+    // Standard validation for all motorized vehicles
     const vehicleRegex = /^[A-Z]{2}[0-9]{2}[A-Z]{1,2}[0-9]{4}$/;
-    if (!vehicleRegex.test(newId?.toUpperCase())) {
+    if (newId && !vehicleRegex.test(newId.toUpperCase())) {
       return res.status(400).json({ message: "Invalid Indian Vehicle Number (e.g. MP04AB1234)" });
     }
-    await UserModel.findByIdAndUpdate(req.userId, { pendingVehicleId: newId.toUpperCase() });
+
+    const updateData = {};
+    if (newId) updateData.pendingVehicleId = newId.toUpperCase();
+    
+    console.log(`[VEHICLE_REQUEST] User ${req.userId} requesting ID:`, updateData.pendingVehicleId);
+    
+    await UserModel.findByIdAndUpdate(req.userId, updateData);
     return res.status(200).json({ message: "Update request sent to admin." });
-  } catch (error) { return res.status(500).json({ message: "Error sending request" }); }
+  } catch (error) { 
+    console.error("Vehicle Request Error:", error);
+    return res.status(500).json({ message: "Error sending request" }); 
+  }
 };
 
 const handleVehicleApproval = async (req, res) => {
@@ -197,19 +206,28 @@ const handleVehicleApproval = async (req, res) => {
     if (!partner) return res.status(404).json({ message: "Partner not found" });
 
     if (action === "approve") {
-      partner.vehicleId = partner.pendingVehicleId || partner.vehicleId;
-      partner.pendingVehicleId = "";
-    } else if (action === "reject") {
-      partner.pendingVehicleId = "";
-    } else if (action === "override") {
-      const vehicleRegex = /^[A-Z]{2}[0-9]{2}[A-Z]{1,2}[0-9]{4}$/;
-      if (!vehicleRegex.test(manualId?.toUpperCase())) return res.status(400).json({ message: "Invalid Vehicle Format" });
-      partner.vehicleId = manualId.toUpperCase();
+      const nextId = manualId || partner.pendingVehicleId || partner.vehicleId;
+      console.log(`[APPROVAL] Updating ${partner.name || userId}: ID=${nextId}`);
+      partner.vehicleId = nextId;
     }
 
+    // Always clear pending fields after any action
+    partner.pendingVehicleId = "";
+
+    partner.status = "approved"; 
     await partner.save();
+    
+    // Global broadcast for real-time unlock
+    if (req.io) {
+      req.io.emit("status_update");
+      req.io.emit("order_status_update"); // Trigger broad refresh
+    }
+    
     return res.status(200).json(partner);
-  } catch (error) { return res.status(500).json({ message: "Failed to process update" }); }
+  } catch (error) { 
+    console.error("Vehicle Action Error:", error);
+    return res.status(500).json({ message: "Failed to process update" }); 
+  }
 };
 
 module.exports = {

@@ -11,3 +11,12 @@ npm-debug.log*
 .idea/
 .vscode/
 *.sw?
+
+# Build artifacts
+frontend/build/
+frontend/dist/
+backend/dist/
+node_modules/
+.env
+*.log
+note.txt

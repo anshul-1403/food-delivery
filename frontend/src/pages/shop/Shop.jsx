@@ -65,7 +65,12 @@ const Shop = () => {
     return filtered;
   }, [allProducts, category, searchTerm, sortBy]);
 
-  if (loading) return <div className="loading" style={{ marginTop: '100px', textAlign: 'center' }}>Loading your menu...</div>;
+  if (loading) return (
+    <div style={{ marginTop: '100px', textAlign: 'center', color: 'var(--text-color)' }}>
+      <div className="loading" style={{ margin: '0 auto 20px auto' }}></div>
+      <p>Loading your menu...</p>
+    </div>
+  );
 
   return (
     <div className="shop-container" style={{ marginTop: "70px", padding: "0 20px" }}>

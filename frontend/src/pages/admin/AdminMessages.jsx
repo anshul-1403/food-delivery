@@ -319,7 +319,7 @@ const AdminMessages = () => {
 
             {/* Customer requested close banner */}
             {selected.closeRequestedBy === "customer" && !selected.isClosed && (
-              <Paper sx={{ m: 2, p: 2, bgcolor: "#fff3e0", borderRadius: 2, display: "flex", alignItems: "center", gap: 2 }}>
+              <Paper sx={{ m: 2, p: 2, bgcolor: "rgba(255, 152, 0, 0.1)", border: "1px solid #ff9800", borderRadius: 2, display: "flex", alignItems: "center", gap: 2, color: "var(--text-color)" }}>
                 <Typography variant="body2" sx={{ flex: 1 }}>
                   🔔 The customer has requested to close this conversation. Confirm?
                 </Typography>
@@ -329,7 +329,7 @@ const AdminMessages = () => {
             )}
 
             {selected.closeRequestedBy === "admin" && !selected.isClosed && (
-              <Paper sx={{ m: 2, p: 2, bgcolor: "#e8f4fd", borderRadius: 2 }}>
+              <Paper sx={{ m: 2, p: 2, bgcolor: "rgba(33, 150, 243, 0.1)", border: "1px solid #2196f3", borderRadius: 2, color: "var(--text-color)" }}>
                 <Typography variant="body2">⏳ Waiting for the customer to confirm closure...</Typography>
               </Paper>
             )}
@@ -364,7 +364,15 @@ const AdminMessages = () => {
                   onChange={(e) => setReplyText(e.target.value)}
                   onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleReply(); } }}
                   multiline maxRows={4} size="small"
-                  sx={{ "& .MuiOutlinedInput-root": { borderRadius: 3 } }}
+                  sx={{ 
+                    "& .MuiOutlinedInput-root": { 
+                      borderRadius: 3,
+                      color: "var(--text-color)",
+                      "& fieldset": { borderColor: "var(--border-color)" }
+                    },
+                    "& .MuiInputBase-input": { color: "var(--text-color)" },
+                    "& .MuiInputLabel-root": { color: "var(--text-color)", opacity: 0.7 }
+                  }}
                 />
                 <Button variant="contained" onClick={handleReply} disabled={loading || !replyText.trim()} endIcon={<SendIcon />}
                   sx={{ ml: 1.5, bgcolor: "#e74c3c", "&:hover": { bgcolor: "#c0392b" }, "&:disabled": { bgcolor: "#e74c3c", opacity: 0.5, color: "rgba(255,255,255,0.8)" }, borderRadius: 2, px: 3, flexShrink: 0 }}>
@@ -381,9 +389,15 @@ const AdminMessages = () => {
       </div>
       
       {/* ── New Conversation Dialog ── */}
-      <Dialog open={openNew} onClose={() => setOpenNew(false)} fullWidth maxWidth="sm">
-        <DialogTitle sx={{ fontWeight: 'bold' }}>New Message to Customer</DialogTitle>
-        <DialogContent dividers>
+      <Dialog 
+        open={openNew} 
+        onClose={() => setOpenNew(false)} 
+        fullWidth 
+        maxWidth="sm"
+        PaperProps={{ sx: { bgcolor: "var(--card-bg)", color: "var(--text-color)" } }}
+      >
+        <DialogTitle sx={{ fontWeight: 'bold', bgcolor: "var(--card-bg)", color: "var(--text-color)" }}>New Message to Customer</DialogTitle>
+        <DialogContent dividers sx={{ bgcolor: "var(--card-bg)", color: "var(--text-color)", "& .MuiTypography-root": { color: "var(--text-color)" } }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 1 }}>
             {!location.state?.targetUser ? (
               <Autocomplete
@@ -414,7 +428,7 @@ const AdminMessages = () => {
             />
           </Box>
         </DialogContent>
-        <DialogActions sx={{ p: 2 }}>
+        <DialogActions sx={{ p: 2, bgcolor: "var(--card-bg)" }}>
           <Button onClick={() => setOpenNew(false)} color="inherit">Cancel</Button>
           <Button 
             variant="contained" 

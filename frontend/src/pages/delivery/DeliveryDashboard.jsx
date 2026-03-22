@@ -68,6 +68,11 @@ const DeliveryDashboard = () => {
 
     const refreshData = () => fetchData(true);
 
+    const handleChatDeclined = ({ orderId: eOrderId }) => {
+      toast.error(`Order #${eOrderId.slice(-6)} delivery confirmation was declined by customer! Open chat to resolve.`);
+      refreshData();
+    };
+
     socket.on("status_update", refreshData);
     socket.on("order_status_update", refreshData);
     socket.on("new_order", refreshData);
@@ -75,6 +80,7 @@ const DeliveryDashboard = () => {
     socket.on("message_close_request", refreshData);
     socket.on("message_closed", refreshData);
     socket.on("message_close_declined", refreshData);
+    socket.on("chat_close_declined", handleChatDeclined);
 
     return () => {
       socket.off("status_update", refreshData);
@@ -84,6 +90,7 @@ const DeliveryDashboard = () => {
       socket.off("message_close_request", refreshData);
       socket.off("message_closed", refreshData);
       socket.off("message_close_declined", refreshData);
+      socket.off("chat_close_declined", handleChatDeclined);
     };
   }, []);
 
@@ -102,9 +109,15 @@ const DeliveryDashboard = () => {
   const handleRequestVehicleChange = async (e) => {
     e.preventDefault();
     try {
-      if (!newVehicleId) return;
+      if (!newVehicleId) {
+        toast.info("Please enter a new plate number.");
+        return;
+      }
+      
+      console.log("[DEBUG] Sending Update Request for ID:", newVehicleId);
+      
       await requestVehicleUpdate(newVehicleId);
-      toast.success("Request sent to admin!");
+      toast.success("Update request sent to admin!");
       setNewVehicleId("");
       fetchData(true);
     } catch (error) {
@@ -119,7 +132,7 @@ const DeliveryDashboard = () => {
     }
     try {
       await completeDelivery(orderId);
-      toast.success("Delivery completed! Great job. 🎉");
+      toast.success("Confirmation requested! Waiting for customer to approve.");
       if (activeChatOrderId === orderId) setActiveChatOrderId(null);
       fetchData();
     } catch (error) {
@@ -292,21 +305,70 @@ const DeliveryDashboard = () => {
       <div className="delivery-header">
         <h1>Delivery Partner Dashboard</h1>
         <div className="delivery-tabs">
-          <button className={activeTab === "available" ? "active" : ""} onClick={() => setActiveTab("available")}>
-            Available Jobs ({availableJobs.length})
-          </button>
-          <button className={activeTab === "tasks" ? "active" : ""} onClick={() => setActiveTab("tasks")}>
-            My Active Tasks ({myTasks.length})
-          </button>
-          <button className={activeTab === "fleet" ? "active" : ""} onClick={() => setActiveTab("fleet")}>
-            My Vehicle
-          </button>
+          {!partnerInfo?.vehicleId ? null : (
+            <>
+              <button className={activeTab === "available" ? "active" : ""} onClick={() => setActiveTab("available")}>
+                Available Jobs ({availableJobs.length})
+              </button>
+              <button className={activeTab === "tasks" ? "active" : ""} onClick={() => setActiveTab("tasks")}>
+                My Active Tasks ({myTasks.length})
+              </button>
+              <button className={activeTab === "fleet" ? "active" : ""} onClick={() => setActiveTab("fleet")}>
+                My Vehicle
+              </button>
+            </>
+          )}
         </div>
       </div>
-
       <div className="delivery-content">
         {loading ? (
           <div className="delivery-loader">Loading jobs...</div>
+        ) : (!partnerInfo?.vehicleId) || activeTab === "fleet" ? (
+          <div className="fleet-settings">
+            {(!partnerInfo?.vehicleId) && (
+              <div style={{ textAlign: "center", padding: "20px", marginBottom: "20px", background: "var(--card-bg)", borderRadius: "12px", border: "2px solid #e74c3c" }}>
+                <Typography variant="h5" color="error" gutterBottom>Setup Required</Typography>
+                <Typography sx={{ color: "var(--text-color)", opacity: 0.8 }}>You cannot accept orders until your Vehicle ID is defined and approved by an admin. Please request it below.</Typography>
+              </div>
+            )}
+            <div className="delivery-card">
+              <h3>Vehicle Information</h3>
+              <div className="card-body">
+                <p><strong>Current Vehicle:</strong> <span style={{ textTransform: 'uppercase' }}>{partnerInfo?.vehicleId || "Not Set"}</span></p>
+                {partnerInfo?.pendingVehicleId && (
+                  <div style={{ background: 'rgba(243, 156, 18, 0.1)', padding: '10px', borderRadius: '8px', border: '1px solid #f39c12', marginTop: '10px' }}>
+                    <p style={{ color: '#f39c12', margin: 0, fontWeight: 'bold' }}>Pending Change: {partnerInfo.pendingVehicleId}</p>
+                    <p style={{ fontSize: '0.7rem', opacity: 0.8, color: '#f39c12' }}>Waiting for admin approval</p>
+                  </div>
+                )}
+              </div>
+              {!partnerInfo?.pendingVehicleId && (
+                <div style={{ marginTop: '20px', borderTop: '1px solid var(--border-color)', paddingTop: '20px' }}>
+                  <Box sx={{ p: 2, bgcolor: 'rgba(255,255,255,0.03)', borderRadius: 2, border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <Typography variant="subtitle2" sx={{ mb: 1, color: '#aaa', textTransform: 'uppercase', letterSpacing: 1, fontSize: '0.75rem' }}>
+                      Update Plate Number
+                    </Typography>
+                    <input
+                      type="text"
+                      className="vehicle-id-input"
+                      placeholder="Enter New ID (e.g. MH12AB1234)"
+                      value={newVehicleId}
+                      style={{ width: '100%', padding: '12px', background: 'var(--secondary-bg)', color: 'white', border: '1px solid var(--border-color)', borderRadius: '8px', textTransform: 'uppercase' }}
+                      onChange={(e) => setNewVehicleId(e.target.value.toUpperCase())}
+                    />
+                    
+                    <button 
+                      className="send-request-btn"
+                      onClick={handleRequestVehicleChange}
+                      style={{ width: '100%', marginTop: '20px', padding: '12px', background: '#e74c3c', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
+                    >
+                      Send Update Request
+                    </button>
+                  </Box>
+                </div>
+              )}
+            </div>
+          </div>
         ) : activeTab === "available" ? (
           <div className="jobs-list">
             {availableJobs.length === 0 ? (
@@ -330,58 +392,22 @@ const DeliveryDashboard = () => {
               ))
             )}
           </div>
-        ) : activeTab === "fleet" ? (
-          <div className="fleet-settings">
-            <div className="delivery-card">
-              <h3>Vehicle Information</h3>
-              <div className="card-body">
-                <p><strong>Current Vehicle:</strong> {partnerInfo?.vehicleId}</p>
-                <p><strong>Type:</strong> {partnerInfo?.vehicleType}</p>
-                {partnerInfo?.pendingVehicleId && (
-                  <div style={{ background: 'rgba(243, 156, 18, 0.1)', padding: '10px', borderRadius: '8px', border: '1px solid #f39c12', marginTop: '10px' }}>
-                    <p style={{ color: '#f39c12', margin: 0, fontWeight: 'bold' }}>Pending Change: {partnerInfo.pendingVehicleId}</p>
-                    <p variant="caption" style={{ fontSize: '0.7rem', opacity: 0.8 }}>Waiting for admin approval</p>
-                  </div>
-                )}
-              </div>
-              {!partnerInfo?.pendingVehicleId && (
-                <div style={{ marginTop: '20px', borderTop: '1px solid var(--border-color)', paddingTop: '20px' }}>
-                  <h4>Request Vehicle Change</h4>
-                  <form onSubmit={handleRequestVehicleChange} style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                    <input
-                      type="text"
-                      placeholder="New ID (MH12AB1234)"
-                      required
-                      value={newVehicleId}
-                      onChange={(e) => setNewVehicleId(e.target.value)}
-                      style={{
-                        flex: 1,
-                        padding: '10px',
-                        borderRadius: '8px',
-                        border: '1px solid var(--border-color)',
-                        background: 'var(--secondary-bg)',
-                        color: 'var(--text-color)',
-                        textTransform: 'uppercase'
-                      }}
-                    />
-                    <button type="submit" className="btn-pickup" style={{ width: 'auto', padding: '0 20px' }}>
-                      Send Request
-                    </button>
-                  </form>
-                </div>
-              )}
-            </div>
-          </div>
         ) : (
           <div className="jobs-list">
             {myTasks.length === 0 ? (
               <p className="no-data">You have no active deliveries. Grab a job!</p>
             ) : (
               myTasks.map(order => (
-                <div key={order._id} className="delivery-card active-card">
+                <div key={order._id} className={`delivery-card active-card ${order.cancellationRequest?.requestedBy && !order.cancellationRequest.isProcessed ? 'issue-card' : ''}`} style={order.cancellationRequest?.requestedBy && !order.cancellationRequest.isProcessed ? { border: '2px solid #e74c3c' } : {}}>
                   <div className="card-top">
                     <span className="order-tag">#{order._id.slice(-6)}</span>
-                    <span className="status-tag">OUT FOR DELIVERY</span>
+                    {order.cancellationRequest?.requestedBy && !order.cancellationRequest.isProcessed ? (
+                      <span className="status-tag" style={{ background: 'rgba(231, 76, 60, 0.15)', color: '#e74c3c', border: '1px solid rgba(231, 76, 60, 0.3)' }}>
+                        ⚠️ ISSUE REPORTED
+                      </span>
+                    ) : (
+                      <span className="status-tag">🚚 ON THE WAY</span>
+                    )}
                   </div>
                   <div className="card-body">
                     <p><strong>Customer:</strong> {order.user?.name}</p>
@@ -390,12 +416,12 @@ const DeliveryDashboard = () => {
                     <p><strong>Payment:</strong> {order.paymentMethod} ({order.paymentStatus === "Paid" ? "ALREADY PAID" : "COLLECT CASH"})</p>
                   </div>
                   <div className="delivery-card-actions">
-                    <button className="btn-chat" onClick={() => setActiveChatOrderId(activeChatOrderId === order._id ? null : order._id)}>
+                    <button className="btn-chat" onClick={() => setActiveChatOrderId(activeChatOrderId === order._id ? null : order._id)} style={order.cancellationRequest && !order.cancellationRequest.isProcessed ? { animation: 'pulse 2s infinite' } : {}}>
                       💬 {activeChatOrderId === order._id ? "Hide Chat" : "Open Chat"}
                     </button>
                     {order.status === "Out for Delivery" ? (
                       <button className="btn-complete" onClick={() => handleComplete(order._id)}>
-                        Mark as Delivered
+                        Confirm Delivery
                       </button>
                     ) : (
                       <Chip label="Waiting for Customer" sx={{ flex: 1, height: 44, bgcolor: "var(--secondary-bg)", color: "var(--text-color)", borderRadius: "8px", fontWeight: "bold" }} />

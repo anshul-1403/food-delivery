@@ -163,6 +163,11 @@
   display: block;
 }
 
+.admin-bubble .chat-bubble-meta {
+  color: rgba(255, 255, 255, 0.9);
+  opacity: 1;
+}
+
 /* Reply Input */
 .admin-chat-input {
   display: flex;

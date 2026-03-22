@@ -68,7 +68,12 @@ const MyOrders = () => {
     navigate("/cart");
   };
 
-  if (loading) return <div className="loading">Loading your orders...</div>;
+  if (loading) return (
+    <div style={{ marginTop: '100px', textAlign: 'center', color: 'var(--text-color)' }}>
+      <div className="loading" style={{ margin: '0 auto 20px auto' }}></div>
+      <p>Loading your orders...</p>
+    </div>
+  );
 
   return (
     <div className="my-orders-container">

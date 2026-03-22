@@ -31,27 +31,27 @@ const ConfirmedBooking = () => {
 
   return (
     <Container maxWidth="sm" sx={{ mt: 8, mb: 10, textAlign: "center" }}>
-      <Paper elevation={6} sx={{ p: 6, borderRadius: 8 }}>
+      <Paper elevation={6} sx={{ p: 6, borderRadius: 8, bgcolor: "var(--card-bg)", color: "var(--text-color)" }}>
         <CheckCircleOutlineIcon color="success" sx={{ fontSize: 100, mb: 4 }} />
         <Typography variant="h3" gutterBottom sx={{ fontWeight: "bold", color: "#27ae60" }}>
           Order Confirmed!
         </Typography>
-        <Typography variant="h6" color="textSecondary" sx={{ mb: 4 }}>
+        <Typography variant="h6" sx={{ mb: 4, opacity: 0.8 }}>
           Thank you for your order! Your meal is being prepared.
         </Typography>
 
-        <Box sx={{ bgcolor: "#f9f9f9", p: 3, borderRadius: 4, mb: 4, textAlign: "left" }}>
+        <Box sx={{ bgcolor: "var(--secondary-bg)", p: 3, borderRadius: 4, mb: 4, textAlign: "left" }}>
           <Typography variant="body1" sx={{ fontWeight: "600", mb: 1 }}>
             Order ID: {orderId}
           </Typography>
-          <Typography variant="body2" color="textSecondary">
+          <Typography variant="body2" sx={{ opacity: 0.8 }}>
             Payment Method: <strong>{order?.paymentMethod}</strong>
           </Typography>
-          <Typography variant="body2" color="textSecondary">
+          <Typography variant="body2" sx={{ opacity: 0.8 }}>
             Payment Status: <strong style={{ color: order?.paymentStatus === "Paid" ? "#27ae60" : "#e67e22" }}>{order?.paymentStatus}</strong>
           </Typography>
           {order?.paymentId && (
-            <Typography variant="body2" color="textSecondary">
+            <Typography variant="body2" sx={{ opacity: 0.8 }}>
               Payment ID: {order.paymentId}
             </Typography>
           )}

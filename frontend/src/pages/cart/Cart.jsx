@@ -180,7 +180,12 @@ const Cart = () => {
             className="form-control mb-2"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-            style={{ padding: "10px", width: "100%", borderRadius: "5px", border: "1px solid #ddd" }}
+            style={{ 
+              padding: "10px", width: "100%", borderRadius: "5px", 
+              border: "1px solid var(--border-color)",
+              backgroundColor: "var(--bg-color)",
+              color: "var(--text-color)"
+            }}
           />
           <input
             type="text"
@@ -188,14 +193,19 @@ const Cart = () => {
             className="form-control"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            style={{ padding: "10px", width: "100%", borderRadius: "5px", border: "1px solid #ddd" }}
+            style={{ 
+              padding: "10px", width: "100%", borderRadius: "5px", 
+              border: "1px solid var(--border-color)",
+              backgroundColor: "var(--bg-color)",
+              color: "var(--text-color)"
+            }}
           />
         </div>
         
         <div className="payment-method" style={{ marginBottom: "20px" }}>
           <h3>Select Payment Method</h3>
           <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-            <label style={{ display: "flex", alignItems: "center", cursor: "pointer", border: paymentMethod === "COD" ? "2px solid #e74c3c" : "1px solid #ddd", padding: "10px", borderRadius: "8px", flex: 1 }}>
+            <label style={{ display: "flex", alignItems: "center", cursor: "pointer", border: paymentMethod === "COD" ? "2px solid #e74c3c" : "1px solid var(--border-color)", padding: "10px", borderRadius: "8px", flex: 1, color: "var(--text-color)" }}>
               <input 
                 type="radio" 
                 name="payment" 
@@ -206,7 +216,7 @@ const Cart = () => {
               />
               Cash on Delivery
             </label>
-            <label style={{ display: "flex", alignItems: "center", cursor: "pointer", border: paymentMethod === "Razorpay" ? "2px solid #e74c3c" : "1px solid #ddd", padding: "10px", borderRadius: "8px", flex: 1 }}>
+            <label style={{ display: "flex", alignItems: "center", cursor: "pointer", border: paymentMethod === "Razorpay" ? "2px solid #e74c3c" : "1px solid var(--border-color)", padding: "10px", borderRadius: "8px", flex: 1, color: "var(--text-color)" }}>
               <input 
                 type="radio" 
                 name="payment" 

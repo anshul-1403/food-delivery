@@ -194,14 +194,14 @@ const ChatPanel = ({ orderId, myRole, isActive: externalIsActive, onClose, onSta
       {!minimised && (
         <>
           {chatActive && closeRequestedBy && (
-            <Paper sx={{ p: 1.5, m: 1, bgcolor: "var(--secondary-bg)", borderRadius: 2, border: "1px solid var(--accent-color)" }}>
+            <Paper sx={{ p: 1.5, m: 1, bgcolor: "var(--secondary-bg)", color: "var(--text-color)", borderRadius: 2, border: "1px solid var(--accent-color)" }}>
               <Typography variant="caption" sx={{ display: "block", mb: 1, fontWeight: "bold" }}>
                 {closeRequestedBy === myRole 
                   ? "Waiting for other party to confirm closure..." 
                   : `${closeRequestedBy === "delivery" ? "Partner" : "Customer"} wants to close chat & confirm delivery.`}
               </Typography>
               {closeRequestedBy !== myRole && (
-                <Stack direction="row" spacing={1}>
+                <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
                   <Button fullWidth size="small" variant="contained" color="success" startIcon={<CheckCircleIcon sx={{ fontSize: 14 }} />} onClick={handleConfirmClose} sx={{ fontSize: "0.7rem" }}>Confirm</Button>
                   <Button fullWidth size="small" variant="outlined" color="error" startIcon={<CancelIcon sx={{ fontSize: 14 }} />} onClick={handleDeclineClose} sx={{ fontSize: "0.7rem" }}>Decline</Button>
                 </Stack>
@@ -247,8 +247,8 @@ const ChatPanel = ({ orderId, myRole, isActive: externalIsActive, onClose, onSta
               </IconButton>
             </div>
           ) : (
-            <div className="chat-panel-closed" style={{ background: "var(--secondary-bg)", padding: 10, textAlign: "center" }}>
-              <Typography variant="caption" color="textSecondary">Order Delivered & Chat Closed 🎉</Typography>
+            <div className="chat-panel-closed" style={{ background: "var(--accent-color)", padding: '12px', textAlign: "center", color: "white" }}>
+              <Typography variant="caption" sx={{ fontWeight: "bold", letterSpacing: "0.5px" }}>Order Delivered & Chat Closed 🎉</Typography>
             </div>
           )}
         </>

@@ -81,11 +81,11 @@ const Tracking = () => {
 
   return (
     <Container maxWidth="md" sx={{ mt: 8 }}>
-      <Paper elevation={3} sx={{ p: 4, textAlign: "center", borderRadius: 4 }}>
+      <Paper elevation={3} sx={{ p: 4, textAlign: "center", borderRadius: 4, bgcolor: "var(--card-bg)", color: "var(--text-color)" }}>
         <Typography variant="h4" gutterBottom sx={{ color: "#e74c3c", fontWeight: "bold" }}>
           Live Tracking
         </Typography>
-        <Typography variant="subtitle1" color="textSecondary" sx={{ mb: 4 }}>
+        <Typography variant="subtitle1" sx={{ mb: 4, opacity: 0.8 }}>
           Order ID: {orderId}
         </Typography>
 
@@ -96,14 +96,40 @@ const Tracking = () => {
              <Typography variant="h6" color="error" gutterBottom>
               This order has been cancelled.
             </Typography>
-            <Typography variant="body2" color="textSecondary">
+            <Typography variant="body2" sx={{ opacity: 0.8 }}>
               Please contact support if you have any questions.
             </Typography>
           </Box>
         ) : (
           <>
             <Box sx={{ width: "100%", mt: 4 }}>
-              <Stepper activeStep={activeStep} alternativeLabel>
+              <Stepper 
+                activeStep={activeStep} 
+                alternativeLabel 
+                sx={{ 
+                  "& .MuiStepLabel-label": { 
+                    color: "var(--text-color) !important",
+                    opacity: 0.7
+                  }, 
+                  "& .MuiStepLabel-label.Mui-active": { 
+                    color: "var(--text-color) !important",
+                    opacity: 1,
+                    fontWeight: "bold"
+                  },
+                  "& .MuiStepLabel-label.Mui-completed": { 
+                    color: "var(--text-color) !important",
+                    opacity: 1
+                  },
+                  "& .MuiStepIcon-root": { 
+                    color: "#ccc",
+                    "&.Mui-active": { color: "#e74c3c" },
+                    "&.Mui-completed": { color: "#e74c3c" }
+                  },
+                  "& .MuiStepIcon-text": { 
+                    fill: "white" 
+                  } 
+                }}
+              >
                 {steps.map((label) => (
                   <Step key={label}>
                     <StepLabel>{label}</StepLabel>
@@ -117,8 +143,8 @@ const Tracking = () => {
                 {statusMessages[order?.status] || "Your order is being processed."}
               </Typography>
               {order?.deliveryPartner && (
-                <Paper variant="outlined" sx={{ p: 2, display: "inline-block", mt: 2, bgcolor: "#f1f8e9", borderColor: "#81c784" }}>
-                   <Typography variant="body2" color="textSecondary">
+                <Paper variant="outlined" sx={{ p: 2, display: "inline-block", mt: 2, bgcolor: "rgba(129, 199, 132, 0.1)", borderColor: "#81c784", color: "var(--text-color)" }}>
+                   <Typography variant="body2">
                     Delivery Partner: <strong>{order.deliveryPartner.name}</strong>
                   </Typography>
                 </Paper>

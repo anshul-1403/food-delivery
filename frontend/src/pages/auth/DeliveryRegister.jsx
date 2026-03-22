@@ -14,7 +14,6 @@ const DeliveryRegister = () => {
     phone: "",
     address: "",
     vehicleId: "",
-    vehicleType: "Bike"
   });
 
   const handleChange = (e) => {
@@ -36,7 +35,7 @@ const DeliveryRegister = () => {
     <div className="delivery-reg-page">
       <div className="delivery-reg-card">
         <div className="delivery-reg-header">
-          <h1>Join BiteDash Fleet 🚴</h1>
+          <h1>Join BiteDash Fleet 🏍️</h1>
           <p>Register as a Delivery Partner and Start Earning</p>
         </div>
 
@@ -58,17 +57,17 @@ const DeliveryRegister = () => {
               <input type="text" name="phone" placeholder="9876543210" required onChange={handleChange} />
             </div>
             <div className="form-group">
-              <label>Vehicle Type</label>
-              <select name="vehicleType" required onChange={handleChange}>
-                <option value="Bike">Bike</option>
-                <option value="Scooty">Scooty</option>
-              </select>
+              <label>Vehicle Number (Indian Format: MH12AB1234)</label>
+              <input 
+                type="text" 
+                name="vehicleId" 
+                placeholder="MP04AB1234" 
+                required 
+                value={formData.vehicleId} 
+                onChange={handleChange} 
+                style={{ textTransform: 'uppercase' }} 
+              />
             </div>
-          </div>
-
-          <div className="form-group">
-            <label>Vehicle Number (Indian Format: MH12AB1234)</label>
-            <input type="text" name="vehicleId" placeholder="MP04AB1234" required onChange={handleChange} style={{ textTransform: 'uppercase' }} />
           </div>
 
           <div className="form-group">

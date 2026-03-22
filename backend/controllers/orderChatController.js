@@ -117,8 +117,25 @@ const declineCloseChat = async (req, res) => {
     const chat = await OrderChat.findOne({ orderId });
     if (!chat) return res.status(404).json({ message: "Chat not found" });
 
+    const isCustomerDeclining = chat.closeRequestedBy === "delivery";
+
     chat.closeRequestedBy = null;
     await chat.save();
+
+    const order = await Order.findById(orderId).populate("user", "name email").populate("deliveryPartner", "name email vehicleId");
+    if (order && isCustomerDeclining) {
+      // Revert status to Out for Delivery and raise an issue
+      order.status = "Out for Delivery";
+      order.cancellationRequest = {
+        requestedBy: "customer",
+        reason: "Customer declined delivery confirmation. Issue raised.",
+        isProcessed: false
+      };
+      await order.save();
+      
+      req.io.to(`order_${orderId}`).emit("order_status_update", order);
+      req.io.emit("status_update", order);
+    }
 
     // Notify
     req.io.to(`order_${orderId}`).emit("chat_close_declined", { orderId });

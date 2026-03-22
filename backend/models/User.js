@@ -12,7 +12,6 @@ const UserModel = mongoose.model("user", {
   
   // Delivery Partner Specific
   vehicleId: { type: String },
-  vehicleType: { type: String },
   pendingVehicleId: { type: String, default: "" },
   status: { type: String, default: "approved" }, // pending, approved, rejected
 });
